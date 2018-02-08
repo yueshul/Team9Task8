@@ -13,6 +13,8 @@ public class MyApplication extends Application {
         final Set<Class<?>> classes = new HashSet<Class<?>>();
         // register root resource
         classes.add(LoginAction.class);
+        classes.add(SellFundAction.class);
+        classes.add(BuyFundAction.class);
         
         
         return classes;

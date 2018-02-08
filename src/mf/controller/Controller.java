@@ -17,6 +17,8 @@ import mf.databean.EmployeeBean;
 import mf.model.CustomerDAO;
 import mf.model.EmployeeDAO;
 import mf.model.Model;
+import mf.rest.BuyFundAction;
+import mf.rest.SellFundAction;
 
 public class Controller extends HttpServlet {
 
@@ -37,9 +39,6 @@ public class Controller extends HttpServlet {
 		Action.add(new LoginAction(model));
 		Action.add(new LogoutAction(model));
 		Action.add(new CustomerChangePwdAction(model));
-		
-		Action.add(new BuyFundAction(model));
-		Action.add(new SellFundAction(model));
 		Action.add(new RequestCheckAction(model));
 		Action.add(new Employee_DepositCheckAction(model));
 		Action.add(new CreateEmployeeAccountAction(model));

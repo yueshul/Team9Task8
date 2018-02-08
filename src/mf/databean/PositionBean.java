@@ -5,7 +5,7 @@ import org.genericdao.PrimaryKey;
 public class PositionBean {
     private String userName;
     private int fundId;
-    private double shares;
+    private long shares;
     public PositionBean(String userName, int fundId, long shares) {
         super();
         this.userName = userName;
@@ -25,11 +25,11 @@ public class PositionBean {
     public void setFundId(int fundId) {
         this.fundId = fundId;
     }
-    public double getShares() {
+    public long getShares() {
         return shares;
     }
 
-    public void setShares(double shares) {
+    public void setShares(long shares) {
         this.shares = shares;
 
     }

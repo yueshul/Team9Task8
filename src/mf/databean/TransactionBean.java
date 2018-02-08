@@ -22,15 +22,6 @@ public class TransactionBean {
     private double amount;
     private String symbol;
     private String status;
-	//    public TransactionBean(int transactionId, int customerId, Date executeDate, long shares, String transactionType,
-//            long amount) {
-//        this.transactionId = transactionId;
-//        this.customerId = customerId;
-//        this.executeDate = executeDate;
-//        this.shares = shares;
-//        this.transactionType = transactionType;
-//        this.amount = amount;
-//    }
    
     public void setPrice(double price) {
     	 this.price=price;
@@ -126,11 +117,10 @@ public class TransactionBean {
 					return;
 				}
 				if (model.getPositionDAO().read(this.userName,fundId) == null) {
-					System.out.println("new fund!!!:::::S:S:S:S:S:");
 					PositionBean newPos = new PositionBean();
 					newPos.setFundId(fundId);
 					newPos.setUserName(this.userName);
-					newPos.setShares(this.amount / model.getFundPriceHistoryDAO().read(fundId, this.executeDate).getPrice());
+					newPos.setShares((long) (this.amount / model.getFundPriceHistoryDAO().read(fundId, this.executeDate).getPrice()));
 					model.getPositionDAO().create(newPos);
 					
 					double curCash = model.getCustomerDAO().read(this.userName).getCash();
@@ -147,7 +137,7 @@ public class TransactionBean {
 					System.out.println("old fund++++++++++++++++++++" );
 					double s = model.getPositionDAO().read(this.userName, fundId).getShares();
 					//double s = model.getPositionDAO().read(this.symbol, this.userName).getShares();
-					model.getPositionDAO().read(this.userName,fundId).setShares(s + (this.amount / model.getFundPriceHistoryDAO().read(fundId, this.executeDate).getPrice()));
+					model.getPositionDAO().read(this.userName,fundId).setShares((long) (s + (this.amount / model.getFundPriceHistoryDAO().read(fundId, this.executeDate).getPrice())));
 					
 					double curCash = model.getCustomerDAO().read(this.userName).getCash();
 					System.out.println("curCash" + curCash);
@@ -203,7 +193,7 @@ public class TransactionBean {
 						return;
 					}
 					double s = model.getPositionDAO().read(this.userName,fundId).getShares();
-					model.getPositionDAO().read(this.userName,fundId).setShares(s - this.shares);
+					model.getPositionDAO().read(this.userName,fundId).setShares((long) (s - this.shares));
 					double curCash = model.getCustomerDAO().read(this.userName).getCash();
 					model.getCustomerDAO().read(this.userName).setCash(curCash + this.shares * this.price);
 					this.status = "Success";	

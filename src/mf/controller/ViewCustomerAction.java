@@ -60,7 +60,7 @@ public class ViewCustomerAction extends Action {
 					if (tmp != null && tmp.length != 0) {
 						request.setAttribute("date", tmp[tmp.length - 1].getPriceDate());
 					}
-					Map<FundBean, Double> map = new HashMap<FundBean, Double>();
+					Map<FundBean, Long> map = new HashMap<FundBean, Long>();
 					for (PositionBean p : position) {
 						map.put(fundDAO.read(p.getFundId()), p.getShares());
 					}
