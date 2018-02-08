@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"  
+  version="2.0">  
+      
+  <tlib-version>1.0</tlib-version>  
+  <short-name>ebiz-team9</short-name>  
+  <uri></uri>  
+  
+  <function>  
+    <description>  
+      formatSharesNumber 
+    </description>  
+    <name>formatSharesNumber</name>  
+    <function-class>mf.model.Model</function-class>  
+    <function-signature>java.lang.String formatSharesNumber(double)</function-signature>  
+  </function> 
+  <function>  
+    <description>  
+      formatCashNumber 
+    </description>  
+    <name>formatCashNumber</name>  
+    <function-class>mf.model.Model</function-class>  
+    <function-signature>java.lang.String formatCashNumber(double)</function-signature>  
+  </function> 
+  <function>  
+    <description>  
+      formatPriceNumber 
+    </description>  
+    <name>formatPriceNumber</name>  
+    <function-class>mf.model.Model</function-class>  
+    <function-signature>java.lang.String formatPriceNumber(double)</function-signature>  
+  </function> 
+  <function>  
+    <description>  
+      formatDate
+    </description>  
+    <name>formatDate</name>  
+    <function-class>mf.model.Model</function-class>  
+    <function-signature>java.lang.String formatDate(java.util.Date)</function-signature>  
+  </function>  
+</taglib>  
