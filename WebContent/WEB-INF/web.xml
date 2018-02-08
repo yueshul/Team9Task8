@@ -17,8 +17,8 @@
         </init-param>
         <init-param>
           <param-name>jdbcURL</param-name> 
-	      <param-value>jdbc:mysql://task7instance.c068ayoctmwe.us-east-2.rds.amazonaws.com:3306/mutualfund2?useSSL=false</param-value>
-        </init-param>
+          <param-value>jdbc:mysql:///mutualfund?useSSL=false</param-value>
+	     </init-param>
     </servlet>  
     <servlet-mapping>
         <servlet-name>controller-servlet</servlet-name>
