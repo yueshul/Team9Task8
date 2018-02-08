@@ -2,6 +2,7 @@ package mf.rest;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,8 +12,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
+
+import com.google.gson.Gson;
+
 import mf.databean.CustomerBean;
 import mf.databean.EmployeeBean;
 import mf.databean.FundBean;
@@ -38,7 +43,6 @@ public class LoginAction{
     private FundPriceHistoryDAO fundPriceHistoryDAO;
     public void init() {
         model = new Model();
-        System.out.println("model not null!!!!");
         employeeDAO = model.getEmployeeDAO();
         customerDAO = model.getCustomerDAO();
         positionDAO = model.getPositionDAO();
@@ -48,14 +52,17 @@ public class LoginAction{
     }
     
     @POST
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public String sayHello(JsonObject object,@Context HttpServletRequest request) {
+        Gson gson = new Gson();
         if(model == null)init();
-        HttpSession session = request.getSession();
         String userName = object.get("userName").toString().replaceAll("\"", "");
         String type = object.get("type").toString().replaceAll("\"", "");
         String password = object.get("password").toString().replaceAll("\"", "");
+        String successMessage = "Welcome "+userName;
+        String failMessage = "There seems to be an issue with the username/password combination that you entered";
+        HttpSession session = request.getSession();
         try {
             EmployeeBean employee = null;
             CustomerBean customer = null;
@@ -67,10 +74,9 @@ public class LoginAction{
             if (employee != null) {
                 if (employee.getPassword().equals(password)) {
                     session.setAttribute("employee", employee);
-                    
-                    return "employee_homepage.jsp";
+                    return gson.toJson(successMessage);
                 } else {
-                    return "newlogin1.jsp";
+                    return gson.toJson(failMessage);
                 }
             } else if (customer != null) {
                 if (customer.getPassword().equals(password)) {           
@@ -94,18 +100,16 @@ public class LoginAction{
                     TransactionBean[] transactions = transactionDAO.getTransactionByCustomer(customer.getUserName());
                     System.out.println("len:" + transactions.length);
                     request.setAttribute("transactions", transactions);
-                    return "customer_homepage.jsp";
+                    return gson.toJson(successMessage);
                 } else {
-                    return "newlogin2.jsp";
+                    return gson.toJson(failMessage);
                 }
             } else {
-                return "newlogin3.jsp";
+                return gson.toJson(failMessage);
             }
 
         } catch (RollbackException e) {
-            e.printStackTrace();
-            request.setAttribute("errors", e.getMessage());
-            return "error.jsp";
+            return gson.toJson(failMessage);
         }
     }
 }
