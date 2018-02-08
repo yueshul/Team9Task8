@@ -19,23 +19,23 @@ public class Model {
     private TransactionDAO transactionDAO;
     private FundPriceHistoryDAO fundPriceHistoryDAO;
     private PositionDAO positionDAO;
-	public Model(ServletConfig config) throws ServletException {
-		try {
-			String jdbcDriver = config.getInitParameter("jdbcDriverName");
-			String jdbcURL = config.getInitParameter("jdbcURL");
-			ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
-			
-			System.out.println(pool.getDriverName());
-			customerDAO = new CustomerDAO(pool);
+	public Model() {
+	    String jdbcDriver = "com.mysql.jdbc.Driver";
+        String jdbcURL = "jdbc:mysql:///mutualfund?useSSL=false";
+        ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
+        System.out.println("debugging");
+        System.out.println(pool.getDriverName());
+        try {
+            customerDAO = new CustomerDAO(pool);
             employeeDAO = new EmployeeDAO(pool);
             fundDAO = new FundDAO(pool);
             transactionDAO = new TransactionDAO(pool);
             fundPriceHistoryDAO = new FundPriceHistoryDAO(pool);
             positionDAO = new PositionDAO(pool);
-		} catch (DAOException e) {
-			e.printStackTrace();
-			throw new ServletException(e);
-		}
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+        
 	}
 
     public static String formatSharesNumber(double number) {

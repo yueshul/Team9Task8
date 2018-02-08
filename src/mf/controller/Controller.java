@@ -29,7 +29,7 @@ public class Controller extends HttpServlet {
 		// initiate the model and the action servlets
 
 		System.out.println("In INti");
-		Model model = new Model(getServletConfig());
+		Model model = new Model();
 		
 		employeeDAO = model.getEmployeeDAO();
 		customerDAO = model.getCustomerDAO();
