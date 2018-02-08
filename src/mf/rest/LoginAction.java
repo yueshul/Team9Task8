@@ -17,6 +17,7 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import com.google.gson.Gson;
+import mf.rest.ResponseMessage;
 
 import mf.databean.CustomerBean;
 import mf.databean.EmployeeBean;
@@ -31,6 +32,7 @@ import mf.model.FundPriceHistoryDAO;
 import mf.model.Model;
 import mf.model.PositionDAO;
 import mf.model.TransactionDAO;
+import javax.ws.rs.core.Response;
 
 @Path("/login")
 public class LoginAction{
@@ -54,32 +56,40 @@ public class LoginAction{
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String sayHello(JsonObject object,@Context HttpServletRequest request) {
-        Gson gson = new Gson();
+    public Response loginAction(JsonObject object,@Context HttpServletRequest request) {
+        //Gson gson = new Gson();
         if(model == null)init();
         String userName = object.get("userName").toString().replaceAll("\"", "");
-        String type = object.get("type").toString().replaceAll("\"", "");
+        //String type = object.get("type").toString().replaceAll("\"", "");
         String password = object.get("password").toString().replaceAll("\"", "");
         String successMessage = "Welcome "+userName;
         String failMessage = "There seems to be an issue with the username/password combination that you entered";
         HttpSession session = request.getSession();
+        ResponseMessage message = new ResponseMessage();
         try {
             EmployeeBean employee = null;
             CustomerBean customer = null;
-            if(type.equals("Customer")) {
-                customer = customerDAO.read(userName);
-            }else if(type.equals("Employee")) {
+//            if(type.equals("Customer")) {
+//                customer = customerDAO.read(userName);
+//            }else if(type.equals("Employee")) {
+//                employee = employeeDAO.read(userName);
+//            }
+            if (employeeDAO.read(userName) != null) {
                 employee = employeeDAO.read(userName);
-            }
-            if (employee != null) {
-                if (employee.getPassword().equals(password)) {
+            		if (employee.getPassword().equals(password)) {
                     session.setAttribute("employee", employee);
-                    return gson.toJson(successMessage);
+                    
+            			message.setMessage(successMessage);
+            			return Response.status(200).entity(message).build();
+                   
                 } else {
-                    return gson.toJson(failMessage);
+	                	message.setMessage(failMessage);
+	        			return Response.status(200).entity(message).build();
+               
                 }
-            } else if (customer != null) {
-                if (customer.getPassword().equals(password)) {           
+            } else if (customerDAO.read(userName) != null) {
+                customer = customerDAO.read(userName);
+            		if (customer.getPassword().equals(password)) {           
                     PositionBean[] position= positionDAO.getPositionsByCustomer(customer.getUserName());
                     if (position != null && position.length != 0) {
                         FundBean bean = fundDAO.read(position[0].getFundId());
@@ -100,16 +110,21 @@ public class LoginAction{
                     TransactionBean[] transactions = transactionDAO.getTransactionByCustomer(customer.getUserName());
                     System.out.println("len:" + transactions.length);
                     request.setAttribute("transactions", transactions);
-                    return gson.toJson(successMessage);
+                    message.setMessage("Welcome "+userName);
+        				return Response.status(200).entity(message).build();
+               
                 } else {
-                    return gson.toJson(failMessage);
+	                	message.setMessage(failMessage);
+	    				return Response.status(200).entity(message).build();
                 }
             } else {
-                return gson.toJson(failMessage);
+             	message.setMessage(failMessage);
+				return Response.status(200).entity(message).build();
             }
 
         } catch (RollbackException e) {
-            return gson.toJson(failMessage);
+         	message.setMessage(failMessage);
+			return Response.status(200).entity(message).build();
         }
     }
 }
