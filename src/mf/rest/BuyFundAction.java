@@ -1,8 +1,5 @@
 package mf.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -12,25 +9,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.formbeanfactory.FormBeanFactory;
-import org.formbeanfactory.FormBeanFactoryException;
-import org.genericdao.DuplicateKeyException;
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import mf.databean.CustomerBean;
-import mf.databean.FundBean;
 import mf.databean.FundPriceHistoryBean;
 import mf.databean.PositionBean;
-import mf.databean.TransactionBean;
-import mf.formbean.BuyFundForm;
 import mf.model.CustomerDAO;
 import mf.model.FundDAO;
 import mf.model.FundPriceHistoryDAO;
 import mf.model.Model;
 import mf.model.PositionDAO;
-import mf.model.TransactionDAO;
 
 
 public class BuyFundAction {
@@ -92,6 +81,10 @@ public class BuyFundAction {
 					message.setMessage(notEnoughCashA);
 					return Response.status(200).entity(message).build();
 				} 
+				if (amount < price) {
+					message.setMessage(notEnoughCashP);
+					return Response.status(200).entity(message).build();
+				}
 				if (positionDAO.read(customer.getUserName(),fundId) == null) {
 					PositionBean newPos = new PositionBean();
 					newPos.setFundId(fundId);
