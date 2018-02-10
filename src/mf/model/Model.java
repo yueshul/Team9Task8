@@ -23,8 +23,6 @@ public class Model {
 	    String jdbcDriver = "com.mysql.jdbc.Driver";
         String jdbcURL = "jdbc:mysql:///mutualfund?useSSL=false";
         ConnectionPool pool = new ConnectionPool(jdbcDriver, jdbcURL);
-        System.out.println("debugging");
-        System.out.println(pool.getDriverName());
         try {
             customerDAO = new CustomerDAO(pool);
             employeeDAO = new EmployeeDAO(pool);

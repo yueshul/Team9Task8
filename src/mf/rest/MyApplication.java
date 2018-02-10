@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import mf.model.Model;
+
 @ApplicationPath("/")
 public class MyApplication extends Application {
     @Override
@@ -15,8 +17,8 @@ public class MyApplication extends Application {
         classes.add(LoginAction.class);
         classes.add(SellFundAction.class);
         classes.add(BuyFundAction.class);
-        
-        
+        classes.add(CreateFundAction.class);
+        new Model();
         return classes;
     }
 }
