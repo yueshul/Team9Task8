@@ -83,10 +83,11 @@ public class CreateFundAction {
             message.setMessage(successMessage);
             return Response.status(200).entity(message).build();
         } catch (RollbackException e) {
-            if (Transaction.isActive()) Transaction.rollback();
             String rollBackMessage = "Transaction roll back";
             message.setMessage(rollBackMessage);
             return Response.status(403).entity(message).build();
+        } finally {
+            if(Transaction.isActive())Transaction.rollback();
         }
     }
 }

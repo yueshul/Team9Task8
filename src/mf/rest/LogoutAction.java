@@ -23,6 +23,5 @@ public class LogoutAction {
         String successMessage = "You have been successfully logged out";
         message.setMessage(successMessage);
         return Response.status(200).entity(message).build();
-        
     }
 }

@@ -93,6 +93,8 @@ public class CreateCustomerAccountAction {
             String rollBackMessage = "Transaction roll back";
             message.setMessage(rollBackMessage);
             return Response.status(200).entity(message).build();
+        } finally {
+            if(Transaction.isActive())Transaction.rollback();
         }
     }
 }
