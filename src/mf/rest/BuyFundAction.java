@@ -13,11 +13,9 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import mf.databean.CustomerBean;
-import mf.databean.FundPriceHistoryBean;
 import mf.databean.PositionBean;
 import mf.model.CustomerDAO;
 import mf.model.FundDAO;
-import mf.model.FundPriceHistoryDAO;
 import mf.model.Model;
 import mf.model.PositionDAO;
 
@@ -26,14 +24,12 @@ public class BuyFundAction {
 	private CustomerDAO customerDAO;
 	private FundDAO fundDAO;
 	private PositionDAO positionDAO;
-	private FundPriceHistoryDAO fundPriceHistoryDAO;
 	Model model;
 
 	public void init() {
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
         positionDAO = model.getPositionDAO();
-        fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
 	}
 
 	@POST
