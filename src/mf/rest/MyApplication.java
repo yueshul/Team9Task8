@@ -23,6 +23,7 @@ public class MyApplication extends Application {
         classes.add(CreateCustomerAccountAction.class);
         classes.add(CreateFundAction.class);
         classes.add(TransitionDayAction.class);
+        classes.add(ViewPortfolioAction.class);
         new Model();
         return classes;
     }
