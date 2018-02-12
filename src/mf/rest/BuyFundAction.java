@@ -70,8 +70,7 @@ public class BuyFundAction {
 				return Response.status(200).entity(message).build();
 			}
 			int fundId = fundDAO.match(MatchArg.equals("symbol", fundSymbol))[0].getFundId();
-			FundPriceHistoryBean[] history = fundPriceHistoryDAO.match(MatchArg.equals("fundId",fundId));
-			double price = history[history.length - 1].getPrice();
+			double price = fundDAO.read(fundId).getLatestPrice();
 			try {
 				double amount = Double.parseDouble(cashValue);
 				if (amount <= 0) {
