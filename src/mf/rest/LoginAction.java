@@ -2,6 +2,7 @@ package mf.rest;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -11,9 +12,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
 import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
+
+import com.google.gson.Gson;
 import mf.rest.ResponseMessage;
+
 import mf.databean.CustomerBean;
 import mf.databean.EmployeeBean;
 import mf.databean.FundBean;
@@ -52,8 +57,10 @@ public class LoginAction{
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginAction(JsonObject object,@Context HttpServletRequest request) {
+        //Gson gson = new Gson();
         if(model == null)init();
-        String userName = object.get("userName").toString().replaceAll("\"", "");
+        String userName = object.get("username").toString().replaceAll("\"", "");
+        //String type = object.get("type").toString().replaceAll("\"", "");
         String password = object.get("password").toString().replaceAll("\"", "");
         String successMessage = "Welcome "+userName;
         String failMessage = "There seems to be an issue with the username/password combination that you entered";
@@ -62,15 +69,23 @@ public class LoginAction{
         try {
             EmployeeBean employee = null;
             CustomerBean customer = null;
+//            if(type.equals("Customer")) {
+//                customer = customerDAO.read(userName);
+//            }else if(type.equals("Employee")) {
+//                employee = employeeDAO.read(userName);
+//            }
             if (employeeDAO.read(userName) != null) {
                 employee = employeeDAO.read(userName);
             		if (employee.getPassword().equals(password)) {
                     session.setAttribute("employee", employee);
+                    
             			message.setMessage(successMessage);
             			return Response.status(200).entity(message).build();
+                   
                 } else {
 	                	message.setMessage(failMessage);
 	        			return Response.status(200).entity(message).build();
+               
                 }
             } else if (customerDAO.read(userName) != null) {
                 customer = customerDAO.read(userName);
@@ -97,6 +112,7 @@ public class LoginAction{
                     request.setAttribute("transactions", transactions);
                     message.setMessage("Welcome "+userName);
         				return Response.status(200).entity(message).build();
+               
                 } else {
 	                	message.setMessage(failMessage);
 	    				return Response.status(200).entity(message).build();
@@ -105,6 +121,7 @@ public class LoginAction{
              	message.setMessage(failMessage);
 				return Response.status(200).entity(message).build();
             }
+
         } catch (RollbackException e) {
          	message.setMessage(failMessage);
 			return Response.status(200).entity(message).build();
