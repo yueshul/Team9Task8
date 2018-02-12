@@ -76,8 +76,7 @@ public class SellFundAction{
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
-			FundPriceHistoryBean[] history = fundPriceHistoryDAO.match(MatchArg.equals("fundId",fundId));
-			double price = history[history.length - 1].getPrice();
+			double price = fundDAO.read(fundId).getLatestPrice();
 			try {
 				long numOfShares = Long.parseLong(numShares);
 				if (numOfShares <= 0) {
