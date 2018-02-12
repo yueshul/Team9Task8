@@ -4,6 +4,7 @@ import javax.servlet.http.HttpSession;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -11,7 +12,7 @@ import javax.ws.rs.core.Response;
 public class LogoutAction {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public Response performPost(HttpServletRequest request) {
+    public Response performPost(@Context HttpServletRequest request) {
         HttpSession session = request.getSession();
         ResponseMessage message = new ResponseMessage();
         if(session.getAttribute("customer") == null && session.getAttribute("employee")==null) {
