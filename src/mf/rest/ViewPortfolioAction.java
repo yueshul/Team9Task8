@@ -36,6 +36,7 @@ public class ViewPortfolioAction {
 	Model model;
 
 	public void init() {
+		model = new Model();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
 		positionDAO = model.getPositionDAO();
