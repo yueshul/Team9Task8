@@ -28,6 +28,7 @@ public class SellFundAction{
 	Model model;
 
 	public void init() {
+		model=new Model();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
         positionDAO = model.getPositionDAO();
@@ -38,7 +39,7 @@ public class SellFundAction{
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response SellFund(JsonObject object,@Context HttpServletRequest request) {
         if(model == null)init();
-        	String fundSymbol = object.get("fundSymbol").toString().replaceAll("\"", "");
+        	String fundSymbol = object.get("symbol").toString().replaceAll("\"", "");
         String numShares = object.get("numShares").toString().replaceAll("\"", "");
         String success = "The shares have been successfully sold";
         String notLogIn = "You are not currently logged in";

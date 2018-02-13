@@ -41,7 +41,7 @@ public class CreateCustomerAccountAction {
         String city = object.get("city").toString().replaceAll("\"", "");
         String state = object.get("state").toString().replaceAll("\"", "");
         String zip = object.get("zip").toString().replaceAll("\"", "");
-        String email = object.get("zip").toString().replaceAll("\"", "");
+        String email = object.get("email").toString().replaceAll("\"", "");
         String initial_cash = object.get("cash").toString().replaceAll("\"", "");
         double cash = 0;
         try {
