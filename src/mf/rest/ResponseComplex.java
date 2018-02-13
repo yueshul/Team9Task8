@@ -1,7 +1,6 @@
 package mf.rest;
 
 import java.util.ArrayList;
-//import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +16,11 @@ public class ResponseComplex {
 	public void setCash(String cash) {
 		this.cash = cash;
 	}
-		public List<Map<String, String>> getList() {
+		public List<Map<String, String>> getFunds() {
 		return funds;
 	}
 
-	public void setList(List<Map<String, String>> funds) {
+	public void setFunds(List<Map<String, String>> funds) {
 		this.funds = funds;
 	}
 

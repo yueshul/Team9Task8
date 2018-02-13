@@ -82,10 +82,9 @@ public class ViewPortfolioAction {
 				oneFund.put("name", fund.getName());
 				fundList.add(oneFund);
 			}
-			successMessage.setList(fundList);
+			successMessage.setFunds(fundList);
 			successMessage.setCash("" + customer.getCash());
 			successMessage.setMessage("The action was successful");
-			// get funds
 			return Response.status(200).entity(successMessage).build();
 		} catch (NumberFormatException | RollbackException e) {
 			e.printStackTrace();
