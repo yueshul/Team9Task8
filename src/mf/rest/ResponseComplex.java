@@ -7,7 +7,7 @@ import java.util.Map;
 public class ResponseComplex {
 	private String message;
 	private String cash;
-	private List<Map<String,String>> funds = new ArrayList<>();
+	private List<Map<String, String>> funds = new ArrayList<>();
 
 	public String getCash() {
 		return cash;
@@ -16,7 +16,8 @@ public class ResponseComplex {
 	public void setCash(String cash) {
 		this.cash = cash;
 	}
-		public List<Map<String, String>> getFunds() {
+
+	public List<Map<String, String>> getFunds() {
 		return funds;
 	}
 
