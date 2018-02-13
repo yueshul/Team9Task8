@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +20,7 @@ import mf.model.FundDAO;
 import mf.model.Model;
 import mf.model.PositionDAO;
 
-
+@Path("/buyFund")
 public class BuyFundAction {
 	private CustomerDAO customerDAO;
 	private FundDAO fundDAO;
