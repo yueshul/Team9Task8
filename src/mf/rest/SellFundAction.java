@@ -59,7 +59,7 @@ public class SellFundAction{
 			}
 			if (fundSymbol == null || fundSymbol.length() == 0) {
 				message.setMessage(fundNotExist);
-				return Response.status(400).entity(message).build();
+				return Response.status(200).entity(message).build();
 			}
 			if (fundDAO.match(MatchArg.equals("symbol", fundSymbol)).length == 0) {
 				message.setMessage(fundNotExist);
