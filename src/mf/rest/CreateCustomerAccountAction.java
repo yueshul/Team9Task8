@@ -33,16 +33,30 @@ public class CreateCustomerAccountAction {
     public Response performPost(JsonObject object,@Context HttpServletRequest request) {
         if(model == null)init();
         ResponseMessage message = new ResponseMessage();
-        String userName = object.get("username").toString().replaceAll("\"", "");
-        String password = object.get("password").toString().replaceAll("\"", "");
-        String first_name = object.get("fname").toString().replaceAll("\"", "");
-        String last_name = object.get("lname").toString().replaceAll("\"", "");
-        String street_address = object.get("address").toString().replaceAll("\"", "");
-        String city = object.get("city").toString().replaceAll("\"", "");
-        String state = object.get("state").toString().replaceAll("\"", "");
-        String zip = object.get("zip").toString().replaceAll("\"", "");
-        String email = object.get("email").toString().replaceAll("\"", "");
-        String initial_cash = object.get("cash").toString().replaceAll("\"", "");
+        String userName = null;
+        String password = null;
+        String first_name = null;
+        String last_name = null;
+        String street_address = null;
+        String city = null;
+        String state = null;
+        String zip = null;
+        String email = null;
+        String initial_cash = null;
+        try {
+            userName = object.get("username").toString().replaceAll("\"", "");
+            password = object.get("password").toString().replaceAll("\"", "");
+            first_name = object.get("fname").toString().replaceAll("\"", "");
+            last_name = object.get("lname").toString().replaceAll("\"", "");
+            street_address = object.get("address").toString().replaceAll("\"", "");
+            city = object.get("city").toString().replaceAll("\"", "");
+            state = object.get("state").toString().replaceAll("\"", "");
+            zip = object.get("zip").toString().replaceAll("\"", "");
+            email = object.get("email").toString().replaceAll("\"", "");
+            initial_cash = object.get("cash").toString().replaceAll("\"", "");
+        }catch (NullPointerException e) {
+            return Response.status(400).build();
+        }
         double cash = 0;
         try {
             cash = Double.parseDouble(initial_cash);

@@ -37,9 +37,16 @@ public class CreateFundAction {
     public Response performPost(JsonObject object,@Context HttpServletRequest request) {
         if(model == null)init();
         ResponseMessage message = new ResponseMessage();
-        String name = object.get("name").toString().replaceAll("\"", "");
-        String symbol = object.get("symbol").toString().replaceAll("\"", "");
-        String initial_value = object.get("initial_value").toString().replaceAll("\"", "");
+        String name = null;
+        String symbol = null;
+        String initial_value = null;
+        try {
+            name = object.get("name").toString().replaceAll("\"", "");
+            symbol = object.get("symbol").toString().replaceAll("\"", "");
+            initial_value = object.get("initial_value").toString().replaceAll("\"", "");
+        }catch (NullPointerException e) {
+            return Response.status(400).build();
+        }
         double value = 0;
         try {
             value = Double.parseDouble(initial_value);

@@ -52,8 +52,15 @@ public class LoginAction{
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginAction(JsonObject object,@Context HttpServletRequest request) {
         if(model == null)init();
-        String userName = object.get("username").toString().replaceAll("\"", "");
-        String password = object.get("password").toString().replaceAll("\"", "");
+        String userName = null;
+        String password = null;
+        try {
+            userName = object.get("username").toString().replaceAll("\"", "");
+            password = object.get("password").toString().replaceAll("\"", "");
+        }catch (NullPointerException e) {
+            return Response.status(400).build();
+        }
+        
         String successMessage = "Welcome "+userName;
         String failMessage = "There seems to be an issue with the username/password combination that you entered";
         HttpSession session = request.getSession();
