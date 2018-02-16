@@ -60,8 +60,6 @@ public class LoginAction{
         }catch (NullPointerException e) {
             return Response.status(400).build();
         }
-        
-        String successMessage = "Welcome "+userName;
         String failMessage = "There seems to be an issue with the username/password combination that you entered";
         HttpSession session = request.getSession();
         ResponseMessage message = new ResponseMessage();
@@ -72,8 +70,7 @@ public class LoginAction{
                 employee = employeeDAO.read(userName);
             		if (employee.getPassword().equals(password)) {
                     session.setAttribute("employee", employee);
-                    
-            			message.setMessage(successMessage);
+            			message.setMessage("Welcome "+employee.getFirstName());
             			return Response.status(200).entity(message).build();
                    
                 } else {
@@ -104,7 +101,7 @@ public class LoginAction{
                     TransactionBean[] transactions = transactionDAO.getTransactionByCustomer(customer.getUserName());
                     System.out.println("len:" + transactions.length);
                     request.setAttribute("transactions", transactions);
-                    message.setMessage("Welcome "+userName);
+                    message.setMessage("Welcome "+customer.getFirstName());
         				return Response.status(200).entity(message).build();
                
                 } else {
