@@ -13,6 +13,7 @@ public class LogoutAction {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response performPost(@Context HttpServletRequest request) {
+        System.out.println("Logout");
         HttpSession session = request.getSession();
         ResponseMessage message = new ResponseMessage();
         if(session.getAttribute("customer") == null && session.getAttribute("employee")==null) {

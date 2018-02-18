@@ -41,7 +41,15 @@ public class Model {
         df.setRoundingMode(RoundingMode.DOWN);
         return df.format(number);
     }
-    
+    public static String formatShares(double number) {
+        long numOfShares = Double.valueOf(number).longValue();
+        return String.valueOf(numOfShares);
+    }
+    public static String formatCash(double number) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.DOWN);
+        return df.format(number);
+    }
     public static String formatCashNumber(double number) {
         DecimalFormat df = new DecimalFormat(",##0.00");
         df.setRoundingMode(RoundingMode.DOWN);

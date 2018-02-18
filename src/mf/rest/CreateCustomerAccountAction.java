@@ -21,7 +21,7 @@ import mf.model.Model;
 public class CreateCustomerAccountAction {
     private CustomerDAO customerDAO;
     private EmployeeDAO employeeDAO;
-    private Model model;
+    static Model model;
     public void init() {
         model = new Model();
         customerDAO = model.getCustomerDAO();
@@ -31,7 +31,8 @@ public class CreateCustomerAccountAction {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response performPost(JsonObject object,@Context HttpServletRequest request) {
-        if(model == null)init();
+        System.out.println("Create Customer Account");
+        init();
         ResponseMessage message = new ResponseMessage();
         String userName = null;
         String password = null;
@@ -66,7 +67,7 @@ public class CreateCustomerAccountAction {
             return Response.status(403).entity(message).build();
         }
         HttpSession session = request.getSession();
-        String successMessage = "fname was registered successfully";
+        String successMessage = first_name+" was registered successfully";
         String notLoggedInMessage = "You are not currently logged in";
         String notAdminMessage = "You must be an employee to perform this action";
         

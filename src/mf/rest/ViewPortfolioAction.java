@@ -4,22 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
-
 import mf.databean.CustomerBean;
 import mf.databean.FundBean;
 import mf.databean.PositionBean;
@@ -33,10 +26,9 @@ public class ViewPortfolioAction {
 	private CustomerDAO customerDAO;
 	private FundDAO fundDAO;
 	private PositionDAO positionDAO;
-	Model model;
+	static Model model;
 
 	public void init() {
-		model = new Model();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
 		positionDAO = model.getPositionDAO();
@@ -45,8 +37,8 @@ public class ViewPortfolioAction {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPortfolio(@Context HttpServletRequest request) {
-		if (model == null)
-			init();
+	    System.out.println("View Portfolio");
+	    init();
 		String notLogIn = "You are not currently logged in";
 		String fundNotOwned = "You don’t have any funds in your Portfolio";
 		String notCustomer = "You must be a customer to perform this action";
@@ -78,12 +70,12 @@ public class ViewPortfolioAction {
 			for (FundBean fund : fundShares.keySet()) {
 				HashMap<String, String> oneFund = new HashMap<String, String>();
 				oneFund.put("price", fund.getLatestPrice() + "");
-				oneFund.put("shares", fundShares.get(fund).toString());
+				oneFund.put("shares", Model.formatShares(fundShares.get(fund)));
 				oneFund.put("name", fund.getName());
 				fundList.add(oneFund);
 			}
 			successMessage.setFunds(fundList);
-			successMessage.setCash("" + customer.getCash());
+			successMessage.setCash("" + Model.formatCash(customer.getCash()));
 			successMessage.setMessage("The action was successful");
 			return Response.status(200).entity(successMessage).build();
 		} catch (NumberFormatException | RollbackException e) {

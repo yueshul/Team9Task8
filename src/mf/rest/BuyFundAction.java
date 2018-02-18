@@ -25,10 +25,9 @@ public class BuyFundAction {
 	private CustomerDAO customerDAO;
 	private FundDAO fundDAO;
 	private PositionDAO positionDAO;
-	Model model;
+	static Model model;
 
 	public void init() {
-		model= new Model();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
         positionDAO = model.getPositionDAO();
@@ -38,10 +37,11 @@ public class BuyFundAction {
     @Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response BuyFund(JsonObject object,@Context HttpServletRequest request) {
-		if(model == null)init();
+	    System.out.println("Buy Fund Action");
+		init();
 		String fundSymbol = object.get("symbol").toString().replaceAll("\"", "");
 		String cashValue = object.get("cashValue").toString().replaceAll("\"", "");
-		String success = "The fundhas been successfully purchased";
+		String success = "The fund has been successfully purchased";
 		String notLogIn = "You are not currently logged in";
 		String notEnoughCashA = "You don’t have enough cash in your account to make this purchase";
 		String notEnoughCashP = "You didn’t provide enough cash to make this purchase";
@@ -59,6 +59,7 @@ public class BuyFundAction {
 				message.setMessage(notCustomer);
 				return Response.status(200).entity(message).build();
 			}
+			customer = customerDAO.read(customer.getUserName());
 			if (fundSymbol == null || fundSymbol.length() == 0) {
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
@@ -95,8 +96,9 @@ public class BuyFundAction {
 					positionDAO.update(oldPos);
 				}
 				double purchase = price * (long) (amount / price);
-				customerDAO.read(customer.getUserName()).setCash(customer.getCash() - purchase);
-				customerDAO.update(customer);
+				CustomerBean curCustomer = customerDAO.read(customer.getUserName());
+				curCustomer.setCash(curCustomer.getCash() - purchase);
+				customerDAO.update(curCustomer);
 				message.setMessage(success);
 				return Response.status(200).entity(message).build();
 			} catch(NumberFormatException e) {

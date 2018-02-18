@@ -35,10 +35,9 @@ public class LoginAction{
     private PositionDAO positionDAO;
     private TransactionDAO transactionDAO;
     private FundDAO fundDAO;
-    Model model;
+    static Model model;
     private FundPriceHistoryDAO fundPriceHistoryDAO;
     public void init() {
-        model = new Model();
         employeeDAO = model.getEmployeeDAO();
         customerDAO = model.getCustomerDAO();
         positionDAO = model.getPositionDAO();
@@ -51,7 +50,8 @@ public class LoginAction{
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginAction(JsonObject object,@Context HttpServletRequest request) {
-        if(model == null)init();
+        System.out.println("Login Action");
+        init();
         String userName = null;
         String password = null;
         try {
@@ -99,7 +99,6 @@ public class LoginAction{
                     }
                     session.setAttribute("customer", customer);
                     TransactionBean[] transactions = transactionDAO.getTransactionByCustomer(customer.getUserName());
-                    System.out.println("len:" + transactions.length);
                     request.setAttribute("transactions", transactions);
                     message.setMessage("Welcome "+customer.getFirstName());
         				return Response.status(200).entity(message).build();

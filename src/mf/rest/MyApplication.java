@@ -24,7 +24,20 @@ public class MyApplication extends Application {
         classes.add(CreateFundAction.class);
         classes.add(TransitionDayAction.class);
         classes.add(ViewPortfolioAction.class);
-        new Model();
+        Model model = new Model();
+        initialize(model);
+        System.out.println("initialize finished");
         return classes;
+    }
+    public void initialize(Model model) {
+        LoginAction.model = model;
+        CreateCustomerAccountAction.model = model;
+        BuyFundAction.model = model;
+        CreateFundAction.model = model;
+        RequestCheckAction.model = model;
+        SellFundAction.model = model;
+        TransitionDayAction.model = model;
+        DepositCheckAction.model = model;
+        ViewPortfolioAction.model = model;
     }
 }

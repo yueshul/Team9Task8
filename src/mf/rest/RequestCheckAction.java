@@ -16,34 +16,29 @@ import org.genericdao.RollbackException;
 import mf.databean.CustomerBean;
 import mf.databean.EmployeeBean;
 import mf.model.CustomerDAO;
-import mf.model.EmployeeDAO;
 import mf.model.Model;
 
 @Path("/requestCheck")
 public class RequestCheckAction {
 
 	private CustomerDAO customerDAO;
-	private EmployeeDAO employeeDAO;
-	Model model;
+	static Model model;
 
 	public void init() {
-		model = new Model();
 		customerDAO = model.getCustomerDAO();
-		employeeDAO = model.getEmployeeDAO();
 	}
 
 	@POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response requestCheck(JsonObject object,@Context HttpServletRequest request) {
-        if(model == null)init();
+	    System.out.println("request check");
+        init();
         String success = "The check was successfully requested";
-        String notEnoughCash = "You don’t have sufficient funds in your account to cover the requested check";
-        
+        String notEnoughCash = "You don't have sufficient funds in your account to cover the requested check";
         String notLogIn = "You are not currently logged in";
         String notCustomer = "You must be a customer to perform this action";
-        String cashValue	    = object.getString("cashValue").toString().replaceAll("\"", "");;
-        
+        String cashValue	    = object.getString("cashValue").toString().replaceAll("\"", "");
         HttpSession session = request.getSession();
         ResponseMessage message = new ResponseMessage();
 		try {
@@ -52,10 +47,12 @@ public class RequestCheckAction {
 			if (customer == null) {
 				if (employee != null) {
 					message.setMessage(notCustomer);
+					System.out.println("not customer");
 					return Response.status(200).entity(message).build();
 				} else {
-				message.setMessage(notLogIn);
-    				return Response.status(200).entity(message).build();
+    				    message.setMessage(notLogIn);
+    				    System.out.println("not logged in");
+        				return Response.status(200).entity(message).build();
 				}
 	        }
 			
@@ -70,17 +67,19 @@ public class RequestCheckAction {
 				if (amountRequested <= 0) {
 					return Response.status(400).build();
 				}
-				
+				customer = customerDAO.read(customer.getUserName());
 				double curCash =  customer.getCash();
-				
+				System.out.println("curCash: "+curCash+" amountRequested: "+amountRequested);
 				if (curCash < amountRequested) {
 					message.setMessage(notEnoughCash);
+					System.out.println("not enough cash");
     					return Response.status(200).entity(message).build();
 				}
 				
 				customer.setCash(curCash - amountRequested);
 				customerDAO.update(customer);
 				message.setMessage(success);
+				System.out.println("success");
 				return Response.status(200).entity(message).build();
 				
 			} catch(NumberFormatException e) {

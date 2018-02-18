@@ -10,16 +10,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 
 import mf.databean.CustomerBean;
 import mf.databean.EmployeeBean;
-import mf.databean.FundPriceHistoryBean;
-import mf.databean.PositionBean;
 import mf.model.CustomerDAO;
-import mf.model.EmployeeDAO;
 
 
 import mf.model.Model;
@@ -29,20 +24,18 @@ import mf.model.Model;
 public class DepositCheckAction {
 
 		private CustomerDAO customerDAO;
-		private EmployeeDAO employeeDAO;
-		Model model;
+		static Model model;
 
 		public void init() {
-			model = new Model();
 			customerDAO = model.getCustomerDAO();
-			employeeDAO = model.getEmployeeDAO();
 		}
 
 		@POST
 	    @Produces(MediaType.APPLICATION_JSON)
 	    @Consumes(MediaType.APPLICATION_JSON)
 		public Response depositCheck(JsonObject object,@Context HttpServletRequest request) {
-	        if(model == null)init();
+		    System.out.println("Deposit Action");
+	        init();
 	        String success = "The check was successfully deposited";
 	        String notLogIn = "You are not currently logged in";
 	        String notEmployee = "You must be an employee to perform this action";
