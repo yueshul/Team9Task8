@@ -52,7 +52,7 @@ public class TransitionDayAction {
         } catch (RollbackException e) {
             String rollBackMessage = "Transaction roll back"+e.getMessage();
             message.setMessage(rollBackMessage);
-            return Response.status(403).entity(message).build();
+            return Response.status(400).entity(message).build();
         } finally {
             if(Transaction.isActive())Transaction.rollback();
         }

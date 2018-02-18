@@ -64,7 +64,7 @@ public class CreateCustomerAccountAction {
         }catch(NumberFormatException e) {
             String notDoubleMessage = "The initial value is not valid number";
             message.setMessage(notDoubleMessage);
-            return Response.status(403).entity(message).build();
+            return Response.status(400).entity(message).build();
         }
         HttpSession session = request.getSession();
         String successMessage = first_name+" was registered successfully";

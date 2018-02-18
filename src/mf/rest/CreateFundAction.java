@@ -54,7 +54,7 @@ public class CreateFundAction {
         }catch(NumberFormatException e) {
             String notDoubleMessage = "The initial value is not valid number";
             message.setMessage(notDoubleMessage);
-            return Response.status(403).entity(message).build();
+            return Response.status(400).entity(message).build();
         }
         String successMessage = "The fund was successfully created";
         String notLoggedInMessage = "You are not currently logged in";
@@ -93,7 +93,7 @@ public class CreateFundAction {
         } catch (RollbackException e) {
             String rollBackMessage = "Transaction roll back";
             message.setMessage(rollBackMessage);
-            return Response.status(403).entity(message).build();
+            return Response.status(400).entity(message).build();
         } finally {
             if(Transaction.isActive())Transaction.rollback();
         }
