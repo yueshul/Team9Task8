@@ -76,7 +76,7 @@ public class CreateFundAction {
                     MatchArg.equalsIgnoreCase("name", name))).length != 0) {
                 String alreadyExistMessage = "This fund already exist";
                 message.setMessage(alreadyExistMessage);
-                return Response.status(403).entity(message).build();
+                return Response.status(400).entity(message).build();
             }
             FundBean fund = new FundBean();
             fund.setName(name);
