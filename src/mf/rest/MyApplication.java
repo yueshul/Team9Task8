@@ -10,6 +10,7 @@ import mf.model.Model;
 
 @ApplicationPath("/")
 public class MyApplication extends Application {
+    private static Model model;
     @Override
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> classes = new HashSet<Class<?>>();
@@ -24,20 +25,12 @@ public class MyApplication extends Application {
         classes.add(CreateFundAction.class);
         classes.add(TransitionDayAction.class);
         classes.add(ViewPortfolioAction.class);
-        Model model = new Model();
-        initialize(model);
+        if(model == null)model = new Model();
         System.out.println("initialize finished");
         return classes;
     }
-    public void initialize(Model model) {
-        LoginAction.model = model;
-        CreateCustomerAccountAction.model = model;
-        BuyFundAction.model = model;
-        CreateFundAction.model = model;
-        RequestCheckAction.model = model;
-        SellFundAction.model = model;
-        TransitionDayAction.model = model;
-        DepositCheckAction.model = model;
-        ViewPortfolioAction.model = model;
+    public static Model getModel() {
+        return model;
     }
+    
 }

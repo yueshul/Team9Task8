@@ -1,13 +1,8 @@
 package mf.model;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-
 import org.genericdao.ConnectionPool;
 import org.genericdao.DAOException;
 

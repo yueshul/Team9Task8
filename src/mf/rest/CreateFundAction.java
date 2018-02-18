@@ -22,10 +22,11 @@ import mf.model.Model;
 
 @Path("/createFund")
 public class CreateFundAction {
-    private FundDAO fundDAO;
-    private FundPriceHistoryDAO fundPriceHistoryDAO;
-    static Model model;
+    private static FundDAO fundDAO;
+    private static FundPriceHistoryDAO fundPriceHistoryDAO;
+    private static Model model;
     public void init() {
+        model = MyApplication.getModel();
         fundDAO = model.getFundDAO();
         fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     }
@@ -35,7 +36,7 @@ public class CreateFundAction {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response performPost(JsonObject object,@Context HttpServletRequest request) {
         System.out.println("Create Fund");
-        init();
+        if(model == null)init();
         ResponseMessage message = new ResponseMessage();
         String name = null;
         String symbol = null;

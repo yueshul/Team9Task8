@@ -15,18 +15,19 @@ import mf.model.Model;
 
 @Path("/transitionDay")
 public class TransitionDayAction {
-    static Model model;
-    private FundDAO fundDAO;
+    private static Model model;
+    private static FundDAO fundDAO;
     
     public void init() {
-        this.fundDAO = model.getFundDAO();
+        model = MyApplication.getModel();
+        fundDAO = model.getFundDAO();
     }
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response performPost(@Context HttpServletRequest request) {
         System.out.println("Transition Day");
-        init();
+        if(model == null)init();
         String successMessage = "The fund prices have been successfully recalculated";
         String notLoggedInMessage = "You are not currently logged in";
         String notAdminMessage = "You must be an employee to perform this action";

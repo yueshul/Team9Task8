@@ -30,14 +30,15 @@ import javax.ws.rs.core.Response;
 
 @Path("/login")
 public class LoginAction{
-    private EmployeeDAO employeeDAO;
-    private CustomerDAO customerDAO;
-    private PositionDAO positionDAO;
-    private TransactionDAO transactionDAO;
-    private FundDAO fundDAO;
-    static Model model;
-    private FundPriceHistoryDAO fundPriceHistoryDAO;
+    private static EmployeeDAO employeeDAO;
+    private static CustomerDAO customerDAO;
+    private static PositionDAO positionDAO;
+    private static TransactionDAO transactionDAO;
+    private static FundDAO fundDAO;
+    private static Model model;
+    private static FundPriceHistoryDAO fundPriceHistoryDAO;
     public void init() {
+        model = MyApplication.getModel();
         employeeDAO = model.getEmployeeDAO();
         customerDAO = model.getCustomerDAO();
         positionDAO = model.getPositionDAO();
@@ -51,7 +52,7 @@ public class LoginAction{
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginAction(JsonObject object,@Context HttpServletRequest request) {
         System.out.println("Login Action");
-        init();
+        if(model == null)init();
         String userName = null;
         String password = null;
         try {

@@ -23,10 +23,11 @@ import mf.model.Model;
 @Path("/depositCheck")
 public class DepositCheckAction {
 
-		private CustomerDAO customerDAO;
-		static Model model;
+		private static CustomerDAO customerDAO;
+		private static Model model;
 
 		public void init() {
+		    model = MyApplication.getModel();
 			customerDAO = model.getCustomerDAO();
 		}
 
@@ -35,7 +36,7 @@ public class DepositCheckAction {
 	    @Consumes(MediaType.APPLICATION_JSON)
 		public Response depositCheck(JsonObject object,@Context HttpServletRequest request) {
 		    System.out.println("Deposit Action");
-	        init();
+	        if(model == null)init();
 	        String success = "The check was successfully deposited";
 	        String notLogIn = "You are not currently logged in";
 	        String notEmployee = "You must be an employee to perform this action";

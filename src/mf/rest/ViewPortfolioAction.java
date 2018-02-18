@@ -23,12 +23,13 @@ import mf.model.PositionDAO;
 
 @Path("/viewPortfolio")
 public class ViewPortfolioAction {
-	private CustomerDAO customerDAO;
-	private FundDAO fundDAO;
-	private PositionDAO positionDAO;
-	static Model model;
+	private static CustomerDAO customerDAO;
+	private static FundDAO fundDAO;
+	private static PositionDAO positionDAO;
+	private static Model model;
 
 	public void init() {
+	    model = MyApplication.getModel();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
 		positionDAO = model.getPositionDAO();
@@ -38,7 +39,7 @@ public class ViewPortfolioAction {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getPortfolio(@Context HttpServletRequest request) {
 	    System.out.println("View Portfolio");
-	    init();
+	    if(model == null)init();
 		String notLogIn = "You are not currently logged in";
 		String fundNotOwned = "You don’t have any funds in your Portfolio";
 		String notCustomer = "You must be a customer to perform this action";

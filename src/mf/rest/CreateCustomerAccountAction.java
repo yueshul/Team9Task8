@@ -19,11 +19,11 @@ import mf.model.Model;
 
 @Path("/createCustomerAccount")
 public class CreateCustomerAccountAction {
-    private CustomerDAO customerDAO;
-    private EmployeeDAO employeeDAO;
-    static Model model;
+    private static CustomerDAO customerDAO;
+    private static EmployeeDAO employeeDAO;
+    private static Model model;
     public void init() {
-        model = new Model();
+        model = MyApplication.getModel();
         customerDAO = model.getCustomerDAO();
         employeeDAO = model.getEmployeeDAO();
     }
@@ -32,7 +32,7 @@ public class CreateCustomerAccountAction {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response performPost(JsonObject object,@Context HttpServletRequest request) {
         System.out.println("Create Customer Account");
-        init();
+        if(model == null)init();
         ResponseMessage message = new ResponseMessage();
         String userName = null;
         String password = null;

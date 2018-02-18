@@ -22,12 +22,13 @@ import mf.model.PositionDAO;
 
 @Path("/buyFund")
 public class BuyFundAction {
-	private CustomerDAO customerDAO;
-	private FundDAO fundDAO;
-	private PositionDAO positionDAO;
-	static Model model;
+	private static CustomerDAO customerDAO;
+	private static FundDAO fundDAO;
+	private static PositionDAO positionDAO;
+	private static Model model;
 
 	public void init() {
+	    model = MyApplication.getModel();
 		customerDAO = model.getCustomerDAO();
 		fundDAO = model.getFundDAO();
         positionDAO = model.getPositionDAO();
@@ -38,7 +39,7 @@ public class BuyFundAction {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response BuyFund(JsonObject object,@Context HttpServletRequest request) {
 	    System.out.println("Buy Fund Action");
-		init();
+		if(model == null)init();
 		String fundSymbol = object.get("symbol").toString().replaceAll("\"", "");
 		String cashValue = object.get("cashValue").toString().replaceAll("\"", "");
 		String success = "The fund has been successfully purchased";

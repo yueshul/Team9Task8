@@ -21,10 +21,11 @@ import mf.model.Model;
 @Path("/requestCheck")
 public class RequestCheckAction {
 
-	private CustomerDAO customerDAO;
-	static Model model;
+	private static CustomerDAO customerDAO;
+	private static Model model;
 
 	public void init() {
+	    model = MyApplication.getModel();
 		customerDAO = model.getCustomerDAO();
 	}
 
@@ -33,7 +34,7 @@ public class RequestCheckAction {
     @Consumes(MediaType.APPLICATION_JSON)
 	public Response requestCheck(JsonObject object,@Context HttpServletRequest request) {
 	    System.out.println("request check");
-        init();
+        if(model == null)init();
         String success = "The check was successfully requested";
         String notEnoughCash = "You don't have sufficient funds in your account to cover the requested check";
         String notLogIn = "You are not currently logged in";
