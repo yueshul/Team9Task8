@@ -95,13 +95,13 @@ public class SellFundAction{
 				message.setMessage(success);
 				return Response.status(200).entity(message).build();
 			} catch(NumberFormatException e) {
-				return Response.status(500).build();
+				return Response.status(400).build();
 			}
 
 		} catch (RollbackException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return Response.status(500).build();
+			return Response.status(400).build();
 		}
     }
 }
