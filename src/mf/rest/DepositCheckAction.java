@@ -55,20 +55,24 @@ public class DepositCheckAction {
 				if (employee == null) {
 					if (customer != null) {
 						message.setMessage(notEmployee);
+						System.out.println(notEmployee);
 						return Response.status(200).entity(message).build();
 					} else {
 					message.setMessage(notLogIn);
+					System.out.println(notLogIn);
 	    				return Response.status(200).entity(message).build();
 					}
 		        }
 				
 				if (customerDAO.read(username) == null) {
 					message.setMessage(noSuchCustomer);
+					System.out.println(noSuchCustomer);
     					return Response.status(200).entity(message).build();
 				}
 				
 				CustomerBean customerToDeposit = customerDAO.read(username);
 				if (cash.length() > 20) {
+					System.out.println("too much money");
 					return Response.status(400).build();
 				}
 				
@@ -76,27 +80,33 @@ public class DepositCheckAction {
 					// limit 15 decimal???
 					long amountDeposit = Long.parseLong(cash);
 					if (amountDeposit <= 0) {
+						System.out.println("deposit negative");
 						return Response.status(400).build();
+						
 					}
 					
 					double curCash =  customerToDeposit.getCash();
 					double limit = 10000000000000000000000000000000000.00;
 					if (curCash + amountDeposit > limit) {
+						System.out.println("too much money");
 						return Response.status(400).build();
 					}
 					
 					customerToDeposit.setCash(curCash + amountDeposit);
 					customerDAO.update(customerToDeposit);
 					message.setMessage(success);
+					System.out.println(success);
 					return Response.status(200).entity(message).build();
 					
 				} catch(NumberFormatException e) {
+					System.out.println("number format exception");
 					return Response.status(400).build();
 				}
 
 			} catch (RollbackException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("rolled back");
 				return Response.status(400).build();
 			}
 	    }

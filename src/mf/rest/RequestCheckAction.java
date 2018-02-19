@@ -35,7 +35,7 @@ public class RequestCheckAction {
 	public Response requestCheck(JsonObject object,@Context HttpServletRequest request) {
 	    System.out.println("request check");
         if(model == null)init();
-        String success = "The check was successfully requested";
+        String success = "The check has been successfully requested";
         String notEnoughCash = "You don't have sufficient funds in your account to cover the requested check";
         String notLogIn = "You are not currently logged in";
         String notCustomer = "You must be a customer to perform this action";
@@ -48,6 +48,7 @@ public class RequestCheckAction {
 			if (customer == null) {
 				if (employee != null) {
 					message.setMessage(notCustomer);
+					System.out.println(message);
 					System.out.println("not customer");
 					return Response.status(200).entity(message).build();
 				} else {
@@ -59,6 +60,7 @@ public class RequestCheckAction {
 			
 			
 			if (cashValue.length() > 20) {
+				System.out.println("too much");
 				return Response.status(400).build();
 			}
 			
@@ -66,6 +68,7 @@ public class RequestCheckAction {
 				// limit 15 decimal???
 				long amountRequested = Long.parseLong(cashValue);
 				if (amountRequested <= 0) {
+					System.out.println("negative");
 					return Response.status(400).build();
 				}
 				customer = customerDAO.read(customer.getUserName());
@@ -80,16 +83,19 @@ public class RequestCheckAction {
 				customer.setCash(curCash - amountRequested);
 				customerDAO.update(customer);
 				message.setMessage(success);
+//				System.out.println(message);
 				System.out.println("success");
 				return Response.status(200).entity(message).build();
 				
 			} catch(NumberFormatException e) {
+				System.out.println("number format exception");
 				return Response.status(400).build();
 			}
 
 		} catch (RollbackException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("rolled back");
 			return Response.status(400).build();
 		}
     }
