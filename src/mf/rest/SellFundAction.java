@@ -51,11 +51,11 @@ public class SellFundAction{
         ResponseMessage message = new ResponseMessage();
 		try {
 	        CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-			if (customer == null) {
+			if (session.getAttribute("employee")==null && customer == null) {
 				message.setMessage(notLogIn);
     				return Response.status(200).entity(message).build();
 	        }
-			if (customerDAO.read(customer.getUserName()) == null) {
+			if (customer==null || customerDAO.read(customer.getUserName()) == null) {
 				message.setMessage(notCustomer);
 				return Response.status(200).entity(message).build();
 			}

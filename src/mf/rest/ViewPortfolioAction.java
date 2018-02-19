@@ -81,7 +81,7 @@ public class ViewPortfolioAction {
 			return Response.status(200).entity(successMessage).build();
 		} catch (NumberFormatException | RollbackException e) {
 			e.printStackTrace();
-			return Response.status(500).build();
+			return Response.status(400).build();
 		}
 	}
 }
