@@ -52,24 +52,29 @@ public class SellFundAction{
 		try {
 	        CustomerBean customer = (CustomerBean) session.getAttribute("customer");
 			if (session.getAttribute("employee")==null && customer == null) {
+				System.out.println("not log in");
 				message.setMessage(notLogIn);
     				return Response.status(200).entity(message).build();
 	        }
 			if (customer==null || customerDAO.read(customer.getUserName()) == null) {
+				System.out.println("not customer");
 				message.setMessage(notCustomer);
 				return Response.status(200).entity(message).build();
 			}
 			if (fundSymbol == null || fundSymbol.length() == 0) {
+				System.out.println("Fund not exist");
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
 			if (fundDAO.match(MatchArg.equals("symbol", fundSymbol)).length == 0) {
+				System.out.println("Fund not exist");
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
 			int fundId = fundDAO.match(MatchArg.equals("symbol", fundSymbol))[0].getFundId();
 			PositionBean position = positionDAO.read(customer.getUserName(),fundId);
 			if (position == null) {
+				System.out.println("Fund not exist");
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
@@ -82,16 +87,18 @@ public class SellFundAction{
 				long availableShares = position.getShares();
 				double curCash = customer.getCash();
 				if (availableShares < numOfShares) {
+					System.out.println("not enough share");
 					message.setMessage(notEnoughShare);
 					return Response.status(200).entity(message).build();
 				} else if (availableShares == numOfShares) {
-					positionDAO.delete(position);
+					positionDAO.delete(customer.getUserName(), fundId);
 				} else {
 					position.setShares(availableShares - numOfShares);
+					positionDAO.update(position);
 				}
 				customerDAO.read(customer.getUserName()).setCash(curCash + numOfShares * price);
-				positionDAO.update(position);
 				customerDAO.update(customer);
+				System.out.println("Success");
 				message.setMessage(success);
 				return Response.status(200).entity(message).build();
 			} catch(NumberFormatException e) {

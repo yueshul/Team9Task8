@@ -52,20 +52,24 @@ public class BuyFundAction {
 		ResponseMessage message = new ResponseMessage();
         CustomerBean customer = (CustomerBean) session.getAttribute("customer");
         if (session.getAttribute("employee")==null && customer == null) {
+        		System.out.println("You are not currently logged in");
         		message.setMessage(notLogIn);
 			return Response.status(200).entity(message).build();
         }
         try {
 			if (customer==null || customerDAO.read(customer.getUserName()) == null) {
+				System.out.println("You must be a customer to perform this action");
 				message.setMessage(notCustomer);
 				return Response.status(200).entity(message).build();
 			}
 			customer = customerDAO.read(customer.getUserName());
 			if (fundSymbol == null || fundSymbol.length() == 0) {
+				System.out.println("The fund you provided does not exist");
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
 			if (fundDAO.match(MatchArg.equals("symbol", fundSymbol)).length == 0) {
+				System.out.println("The fund you provided does not exist");
 				message.setMessage(fundNotExist);
 				return Response.status(200).entity(message).build();
 			}
@@ -77,10 +81,14 @@ public class BuyFundAction {
 					return Response.status(400).build();
 				}
 				if (customer.getCash() < amount) {
+					System.out.println("Not enough cash account");
 					message.setMessage(notEnoughCashA);
 					return Response.status(200).entity(message).build();
 				} 
 				if (amount < price) {
+					System.out.println(amount);					
+					System.out.println(price);
+					System.out.println("Not enough cash provided");
 					message.setMessage(notEnoughCashP);
 					return Response.status(200).entity(message).build();
 				}
@@ -100,6 +108,7 @@ public class BuyFundAction {
 				CustomerBean curCustomer = customerDAO.read(customer.getUserName());
 				curCustomer.setCash(curCustomer.getCash() - purchase);
 				customerDAO.update(curCustomer);
+				System.out.println("Success");
 				message.setMessage(success);
 				return Response.status(200).entity(message).build();
 			} catch(NumberFormatException e) {
