@@ -48,12 +48,12 @@ public class ViewPortfolioAction {
 		ResponseComplex successMessage = new ResponseComplex();
 
 		CustomerBean customer = (CustomerBean) session.getAttribute("customer");
-		if (customer == null) {
+		if (session.getAttribute("employee")==null && customer == null) {
 			message.setMessage(notLogIn);
 			return Response.status(200).entity(message).build();
 		}
 		try {
-			if (customerDAO.read(customer.getUserName()) == null) {
+			if (customer==null ||customerDAO.read(customer.getUserName()) == null) {
 				message.setMessage(notCustomer);
 				return Response.status(200).entity(message).build();
 			}
