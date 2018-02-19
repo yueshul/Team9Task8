@@ -54,11 +54,14 @@ public class CreateCustomerAccountAction {
             state = object.get("state").toString().replaceAll("\"", "");
             zip = object.get("zip").toString().replaceAll("\"", "");
             email = object.get("email").toString().replaceAll("\"", "");
-            initial_cash = object.get("cash").toString().replaceAll("\"", "");
         }catch (NullPointerException e) {
             return Response.status(400).build();
         }
+        if(object.get("cash") != null) {
+            initial_cash = object.get("cash").toString().replaceAll("\"", "");
+        }
         double cash = 0;
+        if(initial_cash == null || initial_cash.length() == 0)initial_cash = "0";
         try {
             cash = Double.parseDouble(initial_cash);
         }catch(NumberFormatException e) {

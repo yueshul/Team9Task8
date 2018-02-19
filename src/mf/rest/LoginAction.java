@@ -55,15 +55,17 @@ public class LoginAction{
         if(model == null)init();
         String userName = null;
         String password = null;
+        String failMessage = "There seems to be an issue with the username/password combination that you entered";
+        HttpSession session = request.getSession();
+        ResponseMessage message = new ResponseMessage();
         try {
             userName = object.get("username").toString().replaceAll("\"", "");
             password = object.get("password").toString().replaceAll("\"", "");
         }catch (NullPointerException e) {
-            return Response.status(400).build();
+            message.setMessage(failMessage);
+            return Response.status(200).entity(message).build();
         }
-        String failMessage = "There seems to be an issue with the username/password combination that you entered";
-        HttpSession session = request.getSession();
-        ResponseMessage message = new ResponseMessage();
+        
         try {
             EmployeeBean employee = null;
             CustomerBean customer = null;
