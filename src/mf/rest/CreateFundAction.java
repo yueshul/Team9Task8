@@ -1,6 +1,5 @@
 package mf.rest;
 
-import java.util.Date;
 import javax.json.JsonObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,20 +14,16 @@ import org.genericdao.MatchArg;
 import org.genericdao.RollbackException;
 import org.genericdao.Transaction;
 import mf.databean.FundBean;
-import mf.databean.FundPriceHistoryBean;
 import mf.model.FundDAO;
-import mf.model.FundPriceHistoryDAO;
 import mf.model.Model;
 
 @Path("/createFund")
 public class CreateFundAction {
     private static FundDAO fundDAO;
-    private static FundPriceHistoryDAO fundPriceHistoryDAO;
     private static Model model;
     public void init() {
         model = MyApplication.getModel();
         fundDAO = model.getFundDAO();
-        fundPriceHistoryDAO = model.getFundPriceHistoryDAO();
     }
     
     @POST
@@ -71,22 +66,20 @@ public class CreateFundAction {
         }
         try {
             Transaction.begin();
-            if (fundDAO.match(MatchArg.or(
-                    MatchArg.equalsIgnoreCase("symbol", symbol),
-                    MatchArg.equalsIgnoreCase("name", name))).length != 0) {
-                String alreadyExistMessage = "This fund already exist";
-                message.setMessage(alreadyExistMessage);
-                return Response.status(400).entity(message).build();
+            synchronized (fundDAO) {
+                if (fundDAO.match(MatchArg.or(
+                        MatchArg.equalsIgnoreCase("symbol", symbol),
+                        MatchArg.equalsIgnoreCase("name", name))).length != 0) {
+                    String alreadyExistMessage = "This fund already exist";
+                    message.setMessage(alreadyExistMessage);
+                    return Response.status(400).entity(message).build();
+                }
+                FundBean fund = new FundBean();
+                fund.setName(name);
+                fund.setSymbol(symbol);
+                fund.setLatestPrice(value);
+                fundDAO.create(fund);
             }
-            FundBean fund = new FundBean();
-            fund.setName(name);
-            fund.setSymbol(symbol);
-            fund.setLatestPrice(value);
-            fundDAO.create(fund);
-            FundPriceHistoryBean history = new FundPriceHistoryBean();
-            history.setPrice(value);
-            history.setPriceDate(new Date());
-            fundPriceHistoryDAO.create(history);
             Transaction.commit();
             message.setMessage(successMessage);
             return Response.status(200).entity(message).build();

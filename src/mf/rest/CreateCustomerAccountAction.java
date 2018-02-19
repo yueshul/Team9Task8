@@ -85,24 +85,26 @@ public class CreateCustomerAccountAction {
         
         try {
             Transaction.begin();
-            if (customerDAO.read(userName) != null || employeeDAO.read(userName) != null) {
-                String duplicateMessage = "The input you provided is not valid";
-                message.setMessage(duplicateMessage);
-                return Response.status(200).entity(message).build();
+            synchronized (customerDAO) {
+                if (customerDAO.read(userName) != null || employeeDAO.read(userName) != null) {
+                    String duplicateMessage = "The input you provided is not valid";
+                    message.setMessage(duplicateMessage);
+                    return Response.status(200).entity(message).build();
+                }
+                CustomerBean customer = new CustomerBean();
+                customer.setFirstName(first_name);
+                customer.setLastName(last_name);
+                customer.setUserName(userName);
+                customer.setCash(cash);
+                customer.setCity(city);
+                customer.setZip(zip);
+                customer.setEmail(email);
+                customer.setState(state);
+                customer.setPassword(password);
+                customer.setAddressLine1(street_address);
+                customer.setAddressLine2("");
+                customerDAO.create(customer);
             }
-            CustomerBean customer = new CustomerBean();
-            customer.setFirstName(first_name);
-            customer.setLastName(last_name);
-            customer.setUserName(userName);
-            customer.setCash(cash);
-            customer.setCity(city);
-            customer.setZip(zip);
-            customer.setEmail(email);
-            customer.setState(state);
-            customer.setPassword(password);
-            customer.setAddressLine1(street_address);
-            customer.setAddressLine2("");
-            customerDAO.create(customer);
             Transaction.commit();
             message.setMessage(successMessage);
             return Response.status(200).entity(message).build();
