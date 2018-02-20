@@ -31,11 +31,7 @@ public class Model {
         
 	}
 
-    public static String formatSharesNumber(double number) {
-        DecimalFormat df = new DecimalFormat(",##0.000");
-        df.setRoundingMode(RoundingMode.DOWN);
-        return df.format(number);
-    }
+
     public static String formatShares(double number) {
         long numOfShares = Double.valueOf(number).longValue();
         return String.valueOf(numOfShares);
@@ -45,15 +41,7 @@ public class Model {
         df.setRoundingMode(RoundingMode.DOWN);
         return df.format(number);
     }
-    public static String formatCashNumber(double number) {
-        DecimalFormat df = new DecimalFormat(",##0.00");
-        df.setRoundingMode(RoundingMode.DOWN);
-        return df.format(number);
-    }
-    public static String formatPriceNumber(double number) {
-        return formatCashNumber(number);
-    }
-    
+
     public static String formatDate(Date date){
     		if(date == null) {
     			return "";

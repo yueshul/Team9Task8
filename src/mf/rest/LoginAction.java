@@ -57,6 +57,11 @@ public class LoginAction{
         String password = null;
         String failMessage = "There seems to be an issue with the username/password combination that you entered";
         HttpSession session = request.getSession();
+        if(session.getAttribute("customer")!=null) {
+        		session.setAttribute("customer",null); 
+        } else if(session.getAttribute("employee")!=null){
+        	 	session.setAttribute("employee",null);
+        }
         ResponseMessage message = new ResponseMessage();
         try {
             userName = object.get("username").toString().replaceAll("\"", "");
