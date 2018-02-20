@@ -70,13 +70,17 @@ public class ViewPortfolioAction {
 			List<Map<String, String>> fundList = new ArrayList<Map<String, String>>();
 			for (FundBean fund : fundShares.keySet()) {
 				HashMap<String, String> oneFund = new HashMap<String, String>();
-				oneFund.put("price", fund.getLatestPrice() + "");
+				oneFund.put("price", Model.formatCash(fund.getLatestPrice()));
 				oneFund.put("shares", Model.formatShares(fundShares.get(fund)));
 				oneFund.put("name", fund.getName());
+				System.out.println("price:"+Model.formatCash(fund.getLatestPrice()));
+				System.out.println("shares:"+Model.formatShares(fundShares.get(fund)));
+				System.out.println("name:"+fund.getName());
 				fundList.add(oneFund);
 			}
 			successMessage.setFunds(fundList);
 			successMessage.setCash("" + Model.formatCash(customer.getCash()));
+			System.out.println("cash:"+Model.formatCash(customer.getCash()));
 			successMessage.setMessage("The action was successful");
 			return Response.status(200).entity(successMessage).build();
 		} catch (NumberFormatException | RollbackException e) {
